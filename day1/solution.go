@@ -2,7 +2,8 @@ package main
 
 import (
 	_ "embed"
-	"fmt"
+	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -18,7 +19,40 @@ func init() {
 	}
 }
 
+func sortedElvesArr() []int {
+	elvesIdx := 0
+	elves := make([]int, 1)
+	for _, value := range inputArr {
+		if value == "" {
+			elves = append(elves, 0)
+			elvesIdx = elvesIdx + 1
+		} else {
+			calories, err := strconv.Atoi(value)
+			if err != nil {
+				panic(err)
+			}
+			elves[elvesIdx] = elves[elvesIdx] + calories
+		}
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(elves)))
+	return elves
+}
+
+func part1() int {
+	elves := sortedElvesArr()
+	return elves[0]
+}
+
+func part2() int {
+	elves := sortedElvesArr()
+	calories := 0
+	for _, elvesCalories := range elves[:3] {
+		calories += elvesCalories
+	}
+	return calories
+}
+
 func main() {
-	fmt.Println("Input:", input)
-	fmt.Println("Input array:", inputArr)
+	println(part1())
+	println(part2())
 }
